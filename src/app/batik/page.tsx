@@ -1,5 +1,20 @@
 import PembungkusSidebar from "../components/pembungkusSidebar";
-export const BatikPage = () => {
+
+interface Batik {
+  typeBatik: string;
+  totalBatik: number;
+  jenisBatik: string;
+}
+
+async function getBatikAll(): Promise<Batik> {
+  const res = await fetch(`http://localhost:3001/api/batik`, { method: "GET" });
+
+  return (await res).json();
+}
+
+export const BatikPage = async () => {
+  const hasil = await getBatikAll();
+  console.log(hasil);
   return (
     <PembungkusSidebar>
       <div className="grid grid-cols-1 gap-4">
@@ -27,7 +42,7 @@ export const BatikPage = () => {
                 TYPE BATIK
               </th>
               <th scope="col" className="px-6 py-3">
-                cATEGORY
+                CATEGORY
               </th>
 
               <th scope="col" className="px-6 py-3">
