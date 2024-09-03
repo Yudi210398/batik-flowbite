@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import PembungkusSidebar from "../components/pembungkusSidebar";
 
 interface BatikItem {
@@ -6,14 +7,10 @@ interface BatikItem {
   jenisBatik: string;
 }
 
-interface Batik {
-  result: BatikItem[];
-}
-
 async function getBatikAll(): Promise<BatikItem[]> {
   const res = await fetch(`http://localhost:3001/api/batiks`, {
     method: "GET",
-    next: { revalidate: 60 },
+    next: { tags: ["product"] },
   });
 
   return (await res).json();
@@ -59,31 +56,33 @@ export const BatikPage = async () => {
               </th>
             </tr>
           </thead>
-          <tbody>
-            {hasil?.map((data, i) => (
-              <tr
-                key={i}
-                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-              >
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+          <Suspense fallback={<p className="text-center">Loading</p>}>
+            <tbody>
+              {hasil?.map((data, i) => (
+                <tr
+                  key={i}
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
-                  {data.typeBatik}
-                </th>
-                <td className="px-6 py-4">{data.jenisBatik}</td>
-                <td className="px-6 py-4">{data.totalBatik}</td>
-                <td className="px-6 py-4 text-right">
-                  <a
-                    href="#"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    Pembelian
-                  </a>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+                    {data.typeBatik}
+                  </th>
+                  <td className="px-6 py-4">{data.jenisBatik}</td>
+                  <td className="px-6 py-4">{data.totalBatik}</td>
+                  <td className="px-6 py-4 text-right">
+                    <a
+                      href="#"
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                    >
+                      Pembelian
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Suspense>
         </table>
       </div>
     </PembungkusSidebar>
