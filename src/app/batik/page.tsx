@@ -8,12 +8,12 @@ interface BatikItem {
 }
 
 async function getBatikAll(): Promise<BatikItem[]> {
-  const res = await fetch(`http://localhost:3001/api/batiks`, {
+  const res = await fetch(`http://localhost:3001/batiks`, {
     method: "GET",
     next: { tags: ["product"] },
   });
 
-  return (await res).json();
+  return res.json();
 }
 
 export const BatikPage = async () => {
@@ -21,7 +21,6 @@ export const BatikPage = async () => {
   return (
     <PembungkusSidebar>
       <div className="grid grid-cols-1 gap-4">
-        {/* <!-- ... --> */}
         <div className="justify-self-center">
           <h6 className="text-center font-serif text-3xl">DATA BATIK</h6>
 
