@@ -4,9 +4,8 @@ import { Suspense } from "react";
 import BatikCode from "../components/batikUseAgain/BatikCode";
 import BatikTitle from "../components/batikUseAgain/HeaderCompoenents";
 export interface CustomerInterface {
-  customer: {
-    namaCustomer: string;
-  };
+  namaCustomer: string;
+
   id: number;
 }
 

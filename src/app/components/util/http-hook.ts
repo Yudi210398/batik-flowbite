@@ -12,7 +12,7 @@ export default function useHttp() {
       try {
         const respone = await fetch(url, {
           method,
-          body,
+          body: body ? JSON.stringify(body) : null,
           headers,
           credentials: "include",
         });
