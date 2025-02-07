@@ -1,4 +1,5 @@
 import Input from "./Input";
+import Select from "./SelectFormik";
 
 interface InputForm {
   control: string;
@@ -12,6 +13,10 @@ export default function FormikControl(props: InputForm) {
   switch (control) {
     case "input":
       return <Input {...rest} />;
+
+    case "select":
+      return <Select {...rest} />;
+
     default:
       return null;
   }

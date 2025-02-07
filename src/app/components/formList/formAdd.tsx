@@ -13,6 +13,12 @@ export default function FormAdd() {
     stockBatikAwal: Yup.number().required("Harus diIsi"),
   });
 
+  const dropDownKatun = [
+    { key: "", value: "Pilih Bahan" },
+    { key: "katun", value: "Katun" },
+    { key: "sutra", value: "Sutra" },
+  ];
+
   const onsubmitcuy = async (values: any) => {
     console.log(values, `wkwkw`);
   };
@@ -56,11 +62,10 @@ export default function FormAdd() {
                   <FormikControl
                     name="jenisBatik"
                     label="Jenis Batik"
-                    type="text"
-                    placeholder="masukan data"
-                    control="input"
-                    toucheds={formik.touched.typeBatik}
-                    error={formik.errors.typeBatik}
+                    option={dropDownKatun}
+                    control="select"
+                    toucheds={formik.touched.jenisBatik}
+                    error={formik.errors.jenisBatik}
                   />
                 </div>
               </div>

@@ -1,6 +1,12 @@
 import React from "react";
 import { Field, ErrorMessage } from "formik";
 import TextError from "./TextError";
+import PageLabel from "./formikUseable/Label";
+
+export interface Options {
+  key: string | number;
+  value: string | number;
+}
 
 export interface InputProps {
   label?: string;
@@ -11,7 +17,7 @@ export interface InputProps {
   toucheds?: boolean;
   type?: string;
   placeholder?: string;
-  option: string | number;
+  option?: Options[];
   [key: string]: any;
 }
 
@@ -28,12 +34,7 @@ export default function Input(props: InputProps) {
 
   return (
     <div className="bungkus">
-      <label
-        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-        htmlFor={name}
-      >
-        {label}
-      </label>
+      <PageLabel label={label} name={name} />
       <Field
         className={
           toucheds && error
