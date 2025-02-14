@@ -1,28 +1,39 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import HttpError from "./http-error";
 
 export default function useHttp() {
-  const [errorValidate, setErrorValidate] = useState(false);
-  const [errorPesan, setErorrPesan] = useState("");
+  const [errorValidate, setErrorValidate] = useState<boolean>(false);
+  // const [errorPesan, setErorrPesan] = useState("");
   const [pesanVerify, setPesanVerify] = useState("");
 
   const sendReq = useCallback(
-    async (url: string, method = "GET", body = null, headers = {}) => {
+    async (
+      url: string,
+      method = "GET",
+      body: Record<string, any> | null = null,
+      headers = {}
+    ) => {
       try {
         const respone = await fetch(url, {
           method,
           body: body ? JSON.stringify(body) : null,
-          headers,
+          headers: {
+            "Content-Type": "application/json", // Tambahkan header jika ada body
+            ...headers, // Gabungkan dengan headers tambahan
+          },
           credentials: "include",
         });
         const respondata = await respone.json();
         if (!respone.ok || respone.status === 500)
-          throw new Error(respondata?.error?.pesan);
+          throw new HttpError(respondata.message, respondata.statusCode);
 
         return respondata;
       } catch (err: any) {
-        throw setPesanVerify(err?.message);
+        console.log(err.message, `koja`);
+        setErrorValidate(true);
+        setPesanVerify(err.message);
       }
     },
     []
@@ -32,7 +43,5 @@ export default function useHttp() {
     errorValidate,
     sendReq,
     setErrorValidate,
-    errorPesan,
-    setErorrPesan,
   };
 }

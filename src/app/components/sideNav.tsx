@@ -43,18 +43,17 @@ const SideNav = ({
                   ></path>
                 </svg>
               </button>
-              <a href="https://flowbite.com" className="flex ms-2 md:me-24">
-                <Image
-                  src="https://flowbite.com/docs/images/logo.svg"
-                  className="h-8 me-3"
-                  alt="FlowBite Logo"
-                  width={50}
-                  height={10}
-                />
-                <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
-                  Flowbite
-                </span>
-              </a>
+
+              <Image
+                src="/images/logo.png"
+                className="me-3"
+                alt="lords Logo"
+                width={60}
+                height={2000}
+              />
+              <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
+                LORDS
+              </span>
             </div>
             <div className="flex items-center">
               <div className="flex items-center ms-3">
