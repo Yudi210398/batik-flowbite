@@ -1,12 +1,14 @@
 "use client";
-
-import { useCallback, useState } from "react";
+import { io, Socket } from "socket.io-client";
+import { useCallback, useEffect, useState } from "react";
 import HttpError from "./http-error";
 
 export default function useHttp() {
   const [errorValidate, setErrorValidate] = useState<boolean>(false);
   // const [errorPesan, setErorrPesan] = useState("");
   const [pesanVerify, setPesanVerify] = useState("");
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [realTimeData, setRealTimeData] = useState<any[]>([]);
 
   const sendReq = useCallback(
     async (
@@ -31,17 +33,33 @@ export default function useHttp() {
 
         return respondata;
       } catch (err: any) {
-        console.log(err.message, `koja`);
         setErrorValidate(true);
         setPesanVerify(err.message);
       }
     },
     []
   );
+
+  useEffect(() => {
+    const socketBaru = io("http://localhost:3001");
+    setSocket(socketBaru);
+    socketBaru.emit("update");
+    socketBaru.on("batik_update", (data) => {
+      setRealTimeData(data);
+    });
+    console.log(socket, `cuy`);
+    return () => {
+      socketBaru.off("batik_update");
+      console.log(`kocak,close`);
+      socketBaru.close();
+    };
+  }, []);
+
   return {
     pesanVerify,
     errorValidate,
     sendReq,
     setErrorValidate,
+    realTimeData,
   };
 }

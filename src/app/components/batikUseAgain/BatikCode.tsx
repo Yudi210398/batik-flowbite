@@ -1,6 +1,5 @@
 import React, { Suspense } from "react";
 import Link from "next/link";
-import { BatikItem } from "@/app/fe-batik/page";
 
 interface Column {
   title: string; // Nama kolom
@@ -42,7 +41,7 @@ const BatikCode: React.FC<DynamicTableProps> = ({
           </thead>
 
           <tbody>
-            {data.map((row, rowIndex) => (
+            {data?.map((row: any, rowIndex: number) => (
               <tr
                 key={rowIndex}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"

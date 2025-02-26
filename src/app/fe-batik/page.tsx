@@ -49,7 +49,6 @@ export async function getBatikAll(): Promise<BatikItem[]> {
 
 export const BatikPage = async () => {
   const hasil = await getBatikAll();
-
   return (
     <PembungkusSidebar>
       <div className="grid grid-cols-3 gap-4">

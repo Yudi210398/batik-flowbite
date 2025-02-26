@@ -1,3 +1,4 @@
+"use client";
 import BatikTitle from "@/app/components/batikUseAgain/HeaderCompoenents";
 import FormAdd from "@/app/components/formList/formAdd";
 import PembungkusSidebar from "@/app/components/pembungkusSidebar";

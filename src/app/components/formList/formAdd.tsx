@@ -6,8 +6,14 @@ import useHttp from "../util/http-hook";
 import { useRouter } from "next/navigation";
 export default function FormAdd() {
   const router = useRouter();
-  const { sendReq, pesanVerify, setErrorValidate, errorValidate } = useHttp();
-
+  const {
+    sendReq,
+    pesanVerify,
+    setErrorValidate,
+    errorValidate,
+    realTimeData,
+  } = useHttp();
+  console.log(realTimeData, `sd`);
   const initialValues = {
     typeBatik: "",
     stockBatikAwal: "",
@@ -39,6 +45,7 @@ export default function FormAdd() {
       );
       if (hasil) {
         alert("Data Berhasi di Add");
+        router.refresh();
         router.push("/fe-batik/");
       }
     } catch (err: any) {
