@@ -12,5 +12,5 @@ export function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 export const config = {
-  matcher: ["/fe-batik/:path*", "/fe-customer/:path*", "/"], // Contoh: hanya halaman dashboard dan profile yang dilindungi
+  matcher: ["/fe-batik/:path*", "/fe-customer/:path*", "/fe-order/:path*"], // Contoh: hanya halaman dashboard dan profile yang dilindungi
 };

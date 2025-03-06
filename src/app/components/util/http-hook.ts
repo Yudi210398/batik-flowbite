@@ -3,13 +3,17 @@ import { io, Socket } from "socket.io-client";
 import { useCallback, useEffect, useState } from "react";
 import HttpError from "./http-error";
 
-export default function useHttp() {
+export default function useHttp(
+  dataScoket: string = "",
+  port: string = "3001"
+) {
   const [errorValidate, setErrorValidate] = useState<boolean>(false);
   // const [errorPesan, setErorrPesan] = useState("");
   const [pesanVerify, setPesanVerify] = useState("");
   const [socket, setSocket] = useState<Socket | null>(null);
   const [realTimeData, setRealTimeData] = useState<any[]>([]);
-
+  const limit = 4;
+  const page = 1;
   const sendReq = useCallback(
     async (
       url: string,
@@ -41,18 +45,17 @@ export default function useHttp() {
   );
 
   useEffect(() => {
-    const socketBaru = io("http://localhost:3001");
+    const socketBaru = io(`http://localhost:${port}`);
     setSocket(socketBaru);
-    socketBaru.emit("update");
-    socketBaru.on("batik_update", (data) => {
+    socketBaru.emit(dataScoket, { limit, page });
+    socketBaru.on(dataScoket, (data) => {
       setRealTimeData(data);
     });
-    console.log(socket, `cuy`);
     return () => {
-      socketBaru.off("batik_update");
-      console.log(`kocak,close`);
+      socketBaru.off(dataScoket);
       socketBaru.close();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

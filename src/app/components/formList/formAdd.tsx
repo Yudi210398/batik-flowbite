@@ -1,57 +1,63 @@
 "use client";
-import { Formik, Form, FormikValues, FormikHelpers } from "formik";
+import { Formik, Form, FormikValues } from "formik";
 import * as Yup from "yup";
 import FormikControl from "../formik/FormikControl";
 import useHttp from "../util/http-hook";
 import { useRouter } from "next/navigation";
-export default function FormAdd() {
+export default function FormAdd({ batik = true }) {
   const router = useRouter();
-  const {
-    sendReq,
-    pesanVerify,
-    setErrorValidate,
-    errorValidate,
-    realTimeData,
-  } = useHttp();
-  console.log(realTimeData, `sd`);
-  const initialValues = {
-    typeBatik: "",
-    stockBatikAwal: "",
-    jenisBatik: "",
-  };
-  const validasiShema = Yup.object({
-    typeBatik: Yup.string().required("Harus diIsi"),
-    stockBatikAwal: Yup.number().required("Harus diIsi"),
-    jenisBatik: Yup.string().required("Harus diIsi"),
-  });
+  const { sendReq, pesanVerify, setErrorValidate, errorValidate } = useHttp();
+
+  let initialValues = batik
+    ? {
+        typeBatik: "",
+        stockBatikAwal: "",
+        jenisBatik: "",
+      }
+    : { namaCustomer: "", nomorTelp: "" };
+
+  let validasiShema = batik
+    ? Yup.object({
+        typeBatik: Yup.string().required("Harus diIsi"),
+        stockBatikAwal: Yup.number().required("Harus diIsi"),
+        jenisBatik: Yup.string().required("Harus diIsi"),
+      })
+    : Yup.object({
+        namaCustomer: Yup.string().required("Harus diIsi"),
+        nomorTelp: Yup.string().required("Harus diIsi"),
+      });
 
   const dropDownKatun = [
-    { key: "", value: "Pilih Bahan" },
     { key: "katun", value: "Katun" },
     { key: "sutra", value: "Sutra" },
   ];
 
   const onsubmitcuy = async (values: FormikValues, { resetForm }: any) => {
-    try {
-      setErrorValidate(false);
-      const hasil = await sendReq(
-        "http://localhost:3001/batiks/tambahbatik",
-        "POST",
-        {
+    let objBatikTambah = batik
+      ? {
           typeBatik: values.typeBatik,
           stockBatikAwal: values.stockBatikAwal,
           jenisBatik: values.jenisBatik,
         }
+      : {
+          namaCustomer: values.namaCustomer,
+          nomorTelp: values.nomorTelp,
+        };
+    let url = batik ? "batiks/tambahbatik" : `customer/add`;
+    try {
+      setErrorValidate(false);
+      const hasil = await sendReq(
+        `http://localhost:3001/${url}`,
+        "POST",
+        objBatikTambah
       );
       if (hasil) {
         alert("Data Berhasi di Add");
         router.refresh();
-        router.push("/fe-batik/");
+        router.push(batik ? "/fe-batik/" : "/fe-customer");
       }
     } catch (err: any) {
       setErrorValidate(true);
-    } finally {
-      resetForm();
     }
   };
 
@@ -109,43 +115,70 @@ export default function FormAdd() {
         {(formik) => {
           return (
             <Form>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="mb-5">
-                  <FormikControl
-                    name="typeBatik"
-                    label="Type Batik"
-                    type="text"
-                    placeholder="masukan data"
-                    control="input"
-                    toucheds={formik.touched.typeBatik}
-                    error={formik.errors.typeBatik}
-                  />
-                </div>
+              {batik ? (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="mb-5">
+                    <FormikControl
+                      name="typeBatik"
+                      label="Type Batik"
+                      type="text"
+                      placeholder="masukan data"
+                      control="input"
+                      toucheds={formik.touched.typeBatik}
+                      error={formik.errors.typeBatik}
+                    />
+                  </div>
 
-                <div className="mb-5">
-                  <FormikControl
-                    name="stockBatikAwal"
-                    label="Stock Batik Awal"
-                    placeholder="masukan data"
-                    control="input"
-                    type="number"
-                    toucheds={formik.touched.stockBatikAwal}
-                    error={formik.errors.stockBatikAwal}
-                  />
-                </div>
+                  <div className="mb-5">
+                    <FormikControl
+                      name="stockBatikAwal"
+                      label="Stock Batik Awal"
+                      placeholder="masukan data"
+                      control="input"
+                      type="number"
+                      toucheds={formik.touched.stockBatikAwal}
+                      error={formik.errors.stockBatikAwal}
+                    />
+                  </div>
 
-                <div className="mb-5">
-                  <FormikControl
-                    name="jenisBatik"
-                    label="Jenis Batik"
-                    option={dropDownKatun}
-                    control="select"
-                    toucheds={formik.touched.jenisBatik}
-                    error={formik.errors.jenisBatik}
-                  />
+                  <div className="mb-5">
+                    <FormikControl
+                      name="jenisBatik"
+                      label="Jenis Batik"
+                      option={dropDownKatun}
+                      control="select"
+                      toucheds={formik.touched.jenisBatik}
+                      error={formik.errors.jenisBatik}
+                    />
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="mb-5">
+                    <FormikControl
+                      name="namaCustomer"
+                      label="Nama Customer"
+                      type="text"
+                      placeholder="masukan data"
+                      control="input"
+                      toucheds={formik.touched.namaCustomer}
+                      error={formik.errors.namaCustomer}
+                    />
+                  </div>
 
+                  <div className="mb-5">
+                    <FormikControl
+                      name="nomorTelp"
+                      label="Nomor Handphone / Telephone"
+                      type="text"
+                      placeholder="masukan data"
+                      control="input"
+                      toucheds={formik.touched.nomorTelp}
+                      error={formik.errors.nomorTelp}
+                    />
+                  </div>
+                </div>
+              )}
               <div className="mb-5">
                 <button
                   type={"submit"}

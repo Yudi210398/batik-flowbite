@@ -3,6 +3,7 @@ import PembungkusSidebar from "../components/pembungkusSidebar";
 import { Suspense } from "react";
 import BatikCode from "../components/batikUseAgain/BatikCode";
 import BatikTitle from "../components/batikUseAgain/HeaderCompoenents";
+import Link from "next/link";
 export interface CustomerInterface {
   namaCustomer: string;
 
@@ -81,12 +82,13 @@ export default async function Customer() {
           <hr />
         </div>
         <div className="justify-self-center mt-3">
-          <button
+          <Link
+            href={"fe-customer/tambahData"}
             type="button"
             className="text-white bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
           >
             Tambah Data
-          </button>
+          </Link>
         </div>
         {/* <!-- ... -->
 <!-- ... --> 
@@ -101,6 +103,8 @@ export default async function Customer() {
         linkCustomss={"Pembelian"}
         columns={columns}
         data={hasil}
+        port="3003"
+        socket="customer_update"
         linkBasePath={`/fe-customer`}
       />
     </PembungkusSidebar>

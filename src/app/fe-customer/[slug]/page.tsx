@@ -22,7 +22,7 @@ export async function getCustomerAll(
 
 const columns = [
   { title: "Pembelian Batik", key: "batik.typeBatik", objNested: true },
-  { title: " quantity:", key: "quantity" },
+  { title: "quantity", key: "quantity" },
   { title: "waktu bikin", key: "waktuBikin" },
   { title: "nomor Bon", key: "nomorBon" },
 ];
@@ -54,7 +54,9 @@ export default async function PageSlugCustomer({ params }: GetId) {
 <!-- ... -->
 <!-- ... --> */}
 
-        {hasil.length > 0 && <BatikCode columns={columns} data={hasil} />}
+        {hasil.length > 0 && (
+          <BatikCode columns={columns} data={hasil} websocket={false} />
+        )}
       </div>
     </PembungkusSidebar>
   );

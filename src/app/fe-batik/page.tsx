@@ -119,6 +119,8 @@ export const BatikPage = async () => {
         linkCustomss={"Pembelian"}
         columns={columns}
         data={hasil}
+        socket="batik_update"
+        port="3001"
         linkBasePath={`/fe-batik`}
       />
     </PembungkusSidebar>

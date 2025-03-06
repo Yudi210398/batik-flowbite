@@ -1,6 +1,7 @@
 "use client";
 import { ChangeEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface FormDatas {
   email: string;
@@ -8,7 +9,7 @@ interface FormDatas {
 }
 
 export default function LoginPage() {
-  const [error, setEror] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState<FormDatas>({
     email: "",
     password: "",
@@ -21,89 +22,90 @@ export default function LoginPage() {
       [e.target.name]: e.target.value,
     });
   };
+
   const handleSubmit = async (e: React.FormEvent) => {
-    setEror(null);
+    setError(null);
     e.preventDefault();
-    const respone = await fetch("http://localhost:3001/auth/login", {
+    const response = await fetch("http://localhost:3001/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
       credentials: "include",
     });
-    const data = await respone.json();
-    if (respone.ok) {
+    const data = await response.json();
+    if (response.ok) {
       router.push("/fe-customer");
     } else {
       console.log(data);
-      setEror(data.message);
+      setError(data.message);
     }
   };
 
   return (
-    <>
-      <div className="w-full min-h-screen grid bg-slate-200/25">
-        <div className="m-auto">
-          <h1 className="text-center"> LOGIN PAGE</h1>
+    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+      <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden flex">
+        {/* Left Side - Image */}
+        <div className="hidden md:block w-1/2">
+          <Image
+            src="https://images.unsplash.com/photo-1584184924103-e310d9dc82fc?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="Login illustration"
+            width={3000}
+            height={3000}
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        {/* Right Side - Form */}
+        <div className="w-full md:w-1/2 p-8 flex flex-col justify-center">
+          {/* <div className="flex justify-center mb-4">
+            <Image
+              src="https://flowbite.com/docs/images/logo.svg"
+              alt="Flowbite logo"
+              className="w-10 h-10"
+            />
+          </div> */}
+          <h2 className="text-2xl font-bold text-gray-700 text-center">
+            Sign in to platform
+          </h2>
+
           {error && (
-            <h3 className="text-center text-red-500 uppercase">{error}</h3>
+            <p className="text-center text-red-500 uppercase mt-2">{error}</p>
           )}
-          <br />
-          <form
-            onSubmit={handleSubmit}
-            className="border p-16 bg-white/30 rounded-lg shadow-md"
-          >
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 uppercase"
-              >
-                email
-              </label>
 
-              <input
-                id="email"
-                name="email"
-                type={"email"}
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="email"
-              />
-            </div>
-            <br />
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 uppercase"
-              >
-                Password
-              </label>
+          <form className="mt-6" onSubmit={handleSubmit}>
+            <label className="block text-gray-700">Your email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="mt-2 w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
+              placeholder="name@company.com"
+            />
 
-              <input
-                id="password"
-                name="password"
-                type="password"
-                onChange={handleChange}
-                required
-                value={formData.password}
-                className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="password"
-              />
-            </div>
+            <label className="block mt-4 text-gray-700">Your password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="mt-2 w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
+              placeholder="••••••••"
+            />
 
             <button
-              className={
-                "uppercase text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-              }
-              style={{ marginTop: "20px" }}
-              type={"submit"}
+              type="submit"
+              className="w-full mt-6 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
             >
-              Submit
+              Login
             </button>
           </form>
         </div>
       </div>
-    </>
+    </div>
   );
 }

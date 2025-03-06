@@ -11,7 +11,7 @@ export interface GetId {
 
 const columns = [
   { title: "NAma Customer", key: "customer.namaCustomer", objNested: true },
-  { title: " quantity:", key: "quantity" },
+  { title: " quantity", key: "quantity" },
   { title: "waktu bikin", key: "waktuBikin" },
   { title: "nomor Bon", key: "nomorBon" },
 ];
@@ -49,6 +49,7 @@ export default async function PageSlug({ params }: GetId) {
         {hasil[0]?.batik?.jenisBatik.toUpperCase()}
       </h6>
     );
+  console.log(hasil, `wkwkw`, htmlCheck);
   return (
     <PembungkusSidebar>
       <div className="grid grid-cols-1 gap-4">
@@ -65,7 +66,9 @@ export default async function PageSlug({ params }: GetId) {
       </div>
       <br />
       <br />
-      {hasil.length > 0 && <BatikCode columns={columns} data={hasil} />}
+      {hasil.length > 0 && (
+        <BatikCode columns={columns} websocket={false} data={hasil} />
+      )}
     </PembungkusSidebar>
   );
 }

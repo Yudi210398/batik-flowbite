@@ -1,5 +1,7 @@
+"use client";
 import React, { Suspense } from "react";
 import Link from "next/link";
+import useHttp from "../util/http-hook";
 
 interface Column {
   title: string; // Nama kolom
@@ -14,6 +16,9 @@ interface DynamicTableProps {
   columns: Column[];
   linkCustomss?: string;
   data: any[];
+  socket?: string;
+  port?: string;
+  websocket?: boolean;
   linkBasePath?: string; // Path dasar untuk kolom yang berisi link
 }
 
@@ -23,9 +28,18 @@ const getNestedValue = (obj: any, key: string): any =>
 const BatikCode: React.FC<DynamicTableProps> = ({
   columns,
   data,
+  websocket = true,
   linkBasePath,
+  socket,
+  port,
   linkCustomss,
 }) => {
+  const { realTimeData } = useHttp(socket, port);
+  let websocketsss;
+
+  if (websocket) websocketsss = realTimeData;
+  else websocketsss = data;
+
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <Suspense fallback={<p className="text-center">Loading</p>}>
@@ -41,7 +55,7 @@ const BatikCode: React.FC<DynamicTableProps> = ({
           </thead>
 
           <tbody>
-            {data?.map((row: any, rowIndex: number) => (
+            {websocketsss?.map((row: any, rowIndex: number) => (
               <tr
                 key={rowIndex}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
