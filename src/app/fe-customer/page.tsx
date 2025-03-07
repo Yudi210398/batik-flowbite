@@ -5,6 +5,7 @@ import BatikCode from "../components/batikUseAgain/BatikCode";
 import BatikTitle from "../components/batikUseAgain/HeaderCompoenents";
 import Link from "next/link";
 export interface CustomerInterface {
+  customer: any;
   namaCustomer: string;
 
   id: number;

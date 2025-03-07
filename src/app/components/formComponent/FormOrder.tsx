@@ -31,7 +31,9 @@ export default function FormOrder() {
     hasFetchedcustomer.current = true;
     const fetchCustomer = async () => {
       try {
-        const getCustomer = await sendReq("http://localhost:3001/customer");
+        const getCustomer = await sendReq(
+          "http://localhost:3001/customer?fields=id,namaCustomer"
+        );
 
         setDataCustomer(getCustomer || []);
       } catch (err: any) {
