@@ -27,6 +27,7 @@ export async function getCustomerALl(): Promise<CustomerInterface[]> {
     next: { tags: ["customer"] },
     credentials: "include",
   });
+
   return res.json();
 }
 

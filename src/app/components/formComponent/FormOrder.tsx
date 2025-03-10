@@ -16,7 +16,7 @@ export default function FormOrder() {
     const fetch = async () => {
       try {
         const getbatik = await sendReq(
-          "http://localhost:3001/batiks/getDataBatik"
+          "http://localhost:3001/batiks/selectbatik?fields=id,typeBatik"
         );
         setDataBatik(getbatik || []);
       } catch (err: any) {
