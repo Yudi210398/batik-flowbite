@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import * as Yup from "yup";
 import useHttp from "../util/http-hook";
 
 export default function FormOrder() {
@@ -42,6 +43,21 @@ export default function FormOrder() {
     };
     fetchCustomer();
   }, [sendReq]);
-  console.log(dataCustomer, databatik);
+  const keyMap: Record<string, string> = { id: "key", namaCustomer: "value" };
+  const keyMaps: Record<string, string> = { id: "key", typeBatik: "value" };
+  const customerChageObjeProperties = dataCustomer.map((data) => {
+    return Object.entries(data).reduce((obj, [key, value]) => {
+      return { ...obj, [keyMap[key] || key]: value };
+    }, {});
+  });
+
+  const batikChangeObjProperties = databatik.map((hasil) =>
+    Object.entries(hasil).reduce((obj, [key, value]) => {
+      return { ...obj, [keyMaps[key] || key]: value };
+    }, {})
+  );
+
+  console.log(customerChageObjeProperties, `wer`, batikChangeObjProperties);
+
   return <></>;
 }
