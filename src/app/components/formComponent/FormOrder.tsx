@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import * as Yup from "yup";
 import useHttp from "../util/http-hook";
+import useDropDown from "../util/http-dropDown";
 
 export default function FormOrder() {
   const { sendReq, pesanVerify, setErrorValidate, errorValidate } = useHttp();
@@ -10,6 +11,20 @@ export default function FormOrder() {
   const [dataCustomer, setDataCustomer] = useState([]);
   const hasFetched = useRef(false);
   const hasFetchedcustomer = useRef(false);
+  const { batik, errorValidatesssss } = useDropDown();
+  console.log(batik, `lerss`, errorValidatesssss, `lers`, pesanVerify);
+
+  const initialValues = {
+    batikId: "",
+    customerId: "",
+    quantity: "",
+  };
+
+  const validasiShema = Yup.object({
+    batikId: Yup.number().required("Harus diIsi"),
+    customerId: Yup.number().required("Harus diIsi"),
+    quantity: Yup.number().required("Harus diIsi"),
+  });
 
   useEffect(() => {
     if (hasFetched.current) return;

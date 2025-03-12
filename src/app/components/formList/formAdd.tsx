@@ -8,7 +8,7 @@ export default function FormAdd({ batik = true }) {
   const router = useRouter();
   const { sendReq, pesanVerify, setErrorValidate, errorValidate } = useHttp();
 
-  let initialValues = batik
+  const initialValues = batik
     ? {
         typeBatik: "",
         stockBatikAwal: "",
