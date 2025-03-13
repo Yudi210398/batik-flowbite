@@ -32,14 +32,12 @@ export default function useHttp(
           credentials: "include",
         });
         const respondata = await respone.json();
-        console.log(respondata["error"], `lers datas as`);
         if (!respone.ok || respone.status === 500 || respondata["error"])
           throw new HttpError(respondata.message, respondata.statusCode);
 
         return respondata;
       } catch (err: any) {
         setErrorValidate(true);
-        console.log(err.message, `wkwkwk cak kocak`);
         setPesanVerify(err.message);
       }
     },

@@ -33,9 +33,8 @@ export default function LoginPage() {
       credentials: "include",
     });
     const data = await response.json();
-    if (response.ok) {
-      router.push("/fe-customer");
-    } else {
+    if (response.ok) router.push("/fe-customer");
+    else {
       console.log(data);
       setError(data.message);
     }
@@ -94,7 +93,7 @@ export default function LoginPage() {
               onChange={handleChange}
               required
               className="mt-2 w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
-              placeholder="••••••••"
+              placeholder="****"
             />
 
             <button

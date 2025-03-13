@@ -32,7 +32,10 @@ export default function FormAdd({ batik = true }) {
     { key: "sutra", value: "Sutra" },
   ];
 
-  const onsubmitcuy = async (values: FormikValues, { resetForm }: any) => {
+  const onsubmitcuy = async (
+    values: FormikValues,
+    { resetForm, setSubmitting }: any
+  ) => {
     let objBatikTambah = batik
       ? {
           typeBatik: values.typeBatik,
@@ -58,6 +61,8 @@ export default function FormAdd({ batik = true }) {
       }
     } catch (err: any) {
       setErrorValidate(true);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -181,10 +186,11 @@ export default function FormAdd({ batik = true }) {
               )}
               <div className="mb-5">
                 <button
+                  disabled={formik.isSubmitting}
                   type={"submit"}
                   className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                 >
-                  Submit
+                  {formik.isSubmitting ? "Loading" : "Submit"}
                 </button>
               </div>
             </Form>
