@@ -4,10 +4,12 @@ import { useEffect, useState, useRef } from "react";
 import * as Yup from "yup";
 import useHttp from "../util/http-hook";
 import useDropDown from "../util/http-dropDown";
-import { Formik, FormikValues } from "formik";
-
+import { Form, Formik, FormikValues } from "formik";
+import FormikControl from "../formik/FormikControl";
+import { useRouter } from "next/navigation";
 export default function FormOrder() {
-  const { sendReq } = useHttp();
+  const router = useRouter();
+  const { sendReq, setErrorValidate, pesanVerify, errorValidate } = useHttp();
 
   const { batik, errorDropDown, customer } = useDropDown();
   const initialValues = {
@@ -21,8 +23,35 @@ export default function FormOrder() {
     quantity: Yup.number().required("Harus diIsi"),
   });
 
-  const submitFungsi = async (values: FormikValues, { resetForm }: any) => {};
+  const submitFungsi = async (
+    values: FormikValues,
+    { resetForm, setSubmitting }: any,
+  ) => {
+    const dataObj = {
+      batikId: values.batikId,
+      customerId: values.customerId,
+      quantity: values.quantity,
+    };
+    try {
+      setErrorValidate(false);
+      const result = await sendReq(
+        `http://localhost:3001/batiks/beli`,
+        "POST",
+        dataObj,
+      );
 
+      if (result) {
+        alert("data berhasil di add");
+        resetForm();
+        router.push("/fe-order");
+      }
+    } catch (err) {
+      setErrorValidate(true);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+  console.log(pesanVerify, "lers");
   const keyMap: Record<string, string> = { id: "key", namaCustomer: "value" };
   const keyMaps: Record<string, string> = { id: "key", typeBatik: "value" };
   const customerChageObjeProperties = customer.map((data) => {
@@ -34,9 +63,8 @@ export default function FormOrder() {
   const batikChangeObjProperties = batik.map((hasil) =>
     Object.entries(hasil).reduce((obj, [key, value]) => {
       return { ...obj, [keyMaps[key] || key]: value };
-    }, {})
+    }, {}),
   );
-  console.log(customerChageObjeProperties, `wer`, batikChangeObjProperties);
 
   return (
     <div className="">
@@ -64,10 +92,62 @@ export default function FormOrder() {
 
       {!errorDropDown && (
         <Formik
-          i={initialValues}
+          initialValues={initialValues}
           validationSchema={validasiShema}
           onSubmit={submitFungsi}
-        ></Formik>
+        >
+          {(formik) => {
+            return (
+              <Form>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="">
+                    <FormikControl
+                      name="batikId"
+                      label="Jenis Batik"
+                      option={batikChangeObjProperties}
+                      control="select"
+                      toucheds={formik.touched.batikId}
+                      error={formik.errors.batikId}
+                    />
+                  </div>
+
+                  <div className="mb-5">
+                    <FormikControl
+                      name="customerId"
+                      label="Customer"
+                      option={customerChageObjeProperties}
+                      control="select"
+                      toucheds={formik.touched.customerId}
+                      error={formik.errors.customerId}
+                    />
+                  </div>
+
+                  <div className="mb-5">
+                    <FormikControl
+                      name="quantity"
+                      label="Quantity"
+                      type="number"
+                      placeholder="masukan data"
+                      control="input"
+                      toucheds={formik.touched.quantity}
+                      error={formik.errors.quantity}
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-5">
+                  <button
+                    disabled={formik.isSubmitting}
+                    type={"submit"}
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                  >
+                    {formik.isSubmitting ? "Loading" : "Submit"}
+                  </button>
+                </div>
+              </Form>
+            );
+          }}
+        </Formik>
       )}
     </div>
   );

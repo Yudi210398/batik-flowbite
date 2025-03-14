@@ -15,7 +15,7 @@ export default function Select(props: InputProps) {
     ...rest
   } = props;
 
-  const arrayOption = [{ key: "", value: "Pilih Bahan" }];
+  const arrayOption = [{ key: "", value: "Pilih Option" }];
   const dataAll = [...(arrayOption ?? []), ...(option ?? [])];
   return (
     <div>
