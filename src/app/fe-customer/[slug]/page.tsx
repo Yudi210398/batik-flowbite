@@ -23,7 +23,7 @@ export async function getCustomerAll(
 const columns = [
   { title: "Pembelian Batik", key: "batik.typeBatik", objNested: true },
   { title: "quantity", key: "quantity" },
-  { title: "waktu bikin", key: "waktuBikin" },
+  { title: "waktu bikin", key: "tanggalString" },
   { title: "nomor Bon", key: "nomorBon" },
 ];
 

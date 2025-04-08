@@ -7,6 +7,7 @@ import useDropDown from "../util/http-dropDown";
 import { Form, Formik, FormikValues } from "formik";
 import FormikControl from "../formik/FormikControl";
 import { useRouter } from "next/navigation";
+import PageErrorComponen from "../errorComponentWrongInput/ErrorComponrnt";
 export default function FormOrder() {
   const router = useRouter();
   const { sendReq, setErrorValidate, pesanVerify, errorValidate } = useHttp();
@@ -25,11 +26,11 @@ export default function FormOrder() {
 
   const submitFungsi = async (
     values: FormikValues,
-    { resetForm, setSubmitting }: any,
+    { resetForm, setSubmitting }: any
   ) => {
     const dataObj = {
-      batikId: values.batikId,
-      customerId: values.customerId,
+      batikId: +values.batikId,
+      customerId: +values.customerId,
       quantity: values.quantity,
     };
     try {
@@ -37,13 +38,13 @@ export default function FormOrder() {
       const result = await sendReq(
         `http://localhost:3001/batiks/beli`,
         "POST",
-        dataObj,
+        dataObj
       );
 
       if (result) {
         alert("data berhasil di add");
         resetForm();
-        router.push("/fe-order");
+        router.push("/fe-datapembelian");
       }
     } catch (err) {
       setErrorValidate(true);
@@ -51,7 +52,6 @@ export default function FormOrder() {
       setSubmitting(false);
     }
   };
-  console.log(pesanVerify, "lers");
   const keyMap: Record<string, string> = { id: "key", namaCustomer: "value" };
   const keyMaps: Record<string, string> = { id: "key", typeBatik: "value" };
   const customerChageObjeProperties = customer.map((data) => {
@@ -63,7 +63,7 @@ export default function FormOrder() {
   const batikChangeObjProperties = batik.map((hasil) =>
     Object.entries(hasil).reduce((obj, [key, value]) => {
       return { ...obj, [keyMaps[key] || key]: value };
-    }, {}),
+    }, {})
   );
 
   return (
@@ -88,6 +88,13 @@ export default function FormOrder() {
             Not Responding / Not Found
           </div>
         </div>
+      )}
+
+      {errorValidate && (
+        <PageErrorComponen
+          pesanVerify={pesanVerify}
+          setErrorValidate={setErrorValidate}
+        />
       )}
 
       {!errorDropDown && (

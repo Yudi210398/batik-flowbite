@@ -1,19 +1,19 @@
 import { cookies } from "next/headers";
 import PembungkusSidebar from "../components/pembungkusSidebar";
-import { Suspense } from "react";
+// import { Suspense } from "react";
 import BatikCode from "../components/batikUseAgain/BatikCode";
 import BatikTitle from "../components/batikUseAgain/HeaderCompoenents";
 import Link from "next/link";
 export interface CustomerInterface {
-  customer: any;
+  nomorTelp: string;
   namaCustomer: string;
-
+  customer: { namaCustomer: string };
   id: number;
 }
 
 const columns = [
   { title: "Nama Customer", key: "namaCustomer" },
-  { title: "Nomor Telepon ", key: "nomorTelp" },
+  { title: "Nomor Telepon", key: "nomorTelp" },
   { title: "Pembelian", key: "id", isLink: true },
 ];
 
