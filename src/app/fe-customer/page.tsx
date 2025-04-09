@@ -33,6 +33,7 @@ export async function getCustomerALl(): Promise<CustomerInterface[]> {
 
 export default async function Customer() {
   const hasil = await getCustomerALl();
+
   return (
     <PembungkusSidebar>
       <div className="grid grid-cols-3 gap-4">

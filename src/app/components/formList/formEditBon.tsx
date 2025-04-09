@@ -4,8 +4,16 @@ import useHttp from "../util/http-hook";
 import * as Yup from "yup";
 import PageErrorComponen from "../errorComponentWrongInput/ErrorComponrnt";
 import FormikControl from "../formik/FormikControl";
-export default function FormEditBon(bonData: any) {
+import { useRouter } from "next/navigation";
+interface BonDatas {
+  bonData: string;
+  slugs: number;
+}
+
+export default function FormEditBon(bonData: BonDatas) {
+  const router = useRouter();
   const { sendReq, pesanVerify, setErrorValidate, errorValidate } = useHttp();
+
   const intisialNilai = {
     nomorBon: bonData.bonData,
   };
@@ -20,7 +28,19 @@ export default function FormEditBon(bonData: any) {
   ) => {
     const data = { nomorBon: values.nomorBon };
     try {
-      console.log(data);
+      setErrorValidate(false);
+      const hasil = await sendReq(
+        `http://localhost:3001/batiks/updatebon/edit/${bonData.slugs}`,
+        "PATCH",
+        {
+          nomorBon: values.nomorBon,
+        }
+      );
+      if (hasil) {
+        alert("Data bon berhasil diedit");
+        router.refresh();
+        router.push("/fe-datapembelian");
+      }
     } catch (err: any) {
       setErrorValidate(true);
     } finally {

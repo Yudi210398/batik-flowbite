@@ -30,6 +30,7 @@ interface Paramss {
 
 export default async function ActionPembelian({ params }: Paramss) {
   const result = await getAllDataBeli(+params.slug);
+  console.log(result.nomorBon, `lers`);
   if (result.statusCode === 404) notFound();
   if (params.action !== "editBon") notFound();
   return (
@@ -38,7 +39,7 @@ export default async function ActionPembelian({ params }: Paramss) {
         <BatikTitle title="FORM Edit Bon" />
         <br />
         <div className="container mx-auto max-w-screen-xl">
-          <FormEditBon bonData={result.nomorBon} />
+          <FormEditBon bonData={result?.nomorBon} slugs={+params.slug} />
         </div>
       </div>
     </PembungkusSidebar>
