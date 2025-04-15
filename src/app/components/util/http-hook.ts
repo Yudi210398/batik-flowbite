@@ -56,7 +56,7 @@ export default function useHttp(
       socketBaru.close();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dataScoket, port]);
 
   return {
     pesanVerify,
