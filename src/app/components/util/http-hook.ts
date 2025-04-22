@@ -12,7 +12,7 @@ export default function useHttp(
   const [pesanVerify, setPesanVerify] = useState("");
   const [socket, setSocket] = useState<Socket | null>(null);
   const [realTimeData, setRealTimeData] = useState<any[]>([]);
-  const limit = 4;
+  const limit = 2;
   const page = 1;
   const sendReq = useCallback(
     async (
@@ -47,10 +47,13 @@ export default function useHttp(
   useEffect(() => {
     const socketBaru = io(`http://localhost:${port}`);
     setSocket(socketBaru);
+
     socketBaru.emit(dataScoket, { limit, page });
+
     socketBaru.on(dataScoket, (data) => {
       setRealTimeData(data);
     });
+
     return () => {
       socketBaru.off(dataScoket);
       socketBaru.close();
