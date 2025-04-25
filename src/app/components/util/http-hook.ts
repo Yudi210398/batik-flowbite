@@ -5,15 +5,15 @@ import HttpError from "./http-error";
 
 export default function useHttp(
   dataScoket: string = "",
-  port: string = "3001"
+  port: string = "3001",
+  pagination?: { page: number; limit: number }
 ) {
   const [errorValidate, setErrorValidate] = useState<boolean>(false);
   // const [errorPesan, setErorrPesan] = useState("");
   const [pesanVerify, setPesanVerify] = useState("");
   const [socket, setSocket] = useState<Socket | null>(null);
   const [realTimeData, setRealTimeData] = useState<any[]>([]);
-  const limit = 2;
-  const page = 1;
+
   const sendReq = useCallback(
     async (
       url: string,
@@ -47,7 +47,8 @@ export default function useHttp(
   useEffect(() => {
     const socketBaru = io(`http://localhost:${port}`);
     setSocket(socketBaru);
-
+    const page = pagination?.page || 1;
+    const limit = pagination?.limit || 10;
     socketBaru.emit(dataScoket, { limit, page });
 
     socketBaru.on(dataScoket, (data) => {

@@ -1,8 +1,9 @@
 import PembungkusSidebar from "../components/pembungkusSidebar";
 import { cookies } from "next/headers";
-import BatikCode from "../components/batikUseAgain/BatikCode";
 import BatikTitle from "../components/batikUseAgain/HeaderCompoenents";
 import Link from "next/link";
+import useHttp from "../components/util/http-hook";
+import { BatikTable } from "../components/batikUseAgain/BatikTable";
 export interface BatikItem {
   typeBatik: string;
   stockBatikAwal: number;
@@ -48,6 +49,7 @@ export async function getBatikAll(): Promise<BatikItem[]> {
 }
 
 export const BatikPage = async () => {
+  // const { realTimeData } = useHttp("batik_update", "3001");
   const hasil = await getBatikAll();
 
   return (
@@ -112,18 +114,10 @@ export const BatikPage = async () => {
   <!-- ... -->
   <!-- ... --> */}
       </div>
-
       <br />
       <br />
 
-      <BatikCode
-        linkCustomss={"Pembelian"}
-        columns={columns}
-        data={hasil}
-        socket="batik_update"
-        port="3001"
-        linkBasePath={`/fe-batik`}
-      />
+      <BatikTable columns={columns} />
     </PembungkusSidebar>
   );
 };

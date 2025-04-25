@@ -2,6 +2,7 @@
 import React, { Suspense } from "react";
 import Link from "next/link";
 import useHttp from "../util/http-hook";
+import { useSearchParams } from "next/navigation";
 
 interface Column {
   title: string; // Nama kolom
@@ -36,7 +37,10 @@ const BatikCode: React.FC<DynamicTableProps> = ({
   port,
   linkCustomss,
 }) => {
-  const { realTimeData } = useHttp(socket, port);
+  const searchParams = useSearchParams();
+  const page = parseInt(searchParams.get("page") || "1");
+  const limit = parseInt(searchParams.get("limit") || "1");
+  const { realTimeData } = useHttp(socket, port, { page, limit });
   let websocketsss;
   websocket ? (websocketsss = realTimeData) : (websocketsss = data);
   return (
