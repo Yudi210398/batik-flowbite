@@ -14,7 +14,7 @@ interface DynamicTable {
 
 export const BatikTable: React.FC<DynamicTable> = ({ columns }) => {
   const { realTimeData } = useHttp("batik_update", "3001");
-
+  console.log(realTimeData, `lers`);
   return (
     <div className="relative overflow-x-auto">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

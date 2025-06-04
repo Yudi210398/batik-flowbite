@@ -31,7 +31,7 @@ export async function getBatikAll(id: string | number): Promise<BatikDetail[]> {
   return data.map((item: BatikDetail) => {
     return {
       ...item,
-      waktuBikin: convertTime(item.batik.waktuBikin),
+      waktuBikin: item?.batik.waktuBikin,
     };
   });
 }

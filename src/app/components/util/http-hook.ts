@@ -45,7 +45,7 @@ export default function useHttp(
   );
 
   useEffect(() => {
-    const socketBaru = io(`http://localhost:${port}`);
+    const socketBaru = io(`http://localhost:${port}`, {});
     setSocket(socketBaru);
     const page = pagination?.page || 1;
     const limit = pagination?.limit || 10;

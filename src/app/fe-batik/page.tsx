@@ -1,9 +1,14 @@
+"use client";
+
 import PembungkusSidebar from "../components/pembungkusSidebar";
 import { cookies } from "next/headers";
 import BatikTitle from "../components/batikUseAgain/HeaderCompoenents";
 import Link from "next/link";
-import useHttp from "../components/util/http-hook";
+
 import { BatikTable } from "../components/batikUseAgain/BatikTable";
+import { DataTable } from "./data-table";
+import { columns } from "./columns";
+import useHttp from "../components/util/http-hook";
 export interface BatikItem {
   typeBatik: string;
   stockBatikAwal: number;
@@ -12,7 +17,7 @@ export interface BatikItem {
   waktuBikin: any;
 }
 
-const columns = [
+const columnss = [
   { title: "TYPE BATIK", key: "typeBatik" },
   { title: "CATEGORY", key: "jenisBatik" },
   { title: "SISA STOCK BATIK", key: "stockSaatIni" },
@@ -30,28 +35,28 @@ export const convertTime = (data: string) => {
   return format;
 };
 
-export async function getBatikAll(): Promise<BatikItem[]> {
-  const cookiesss = cookies();
-  const res = await fetch(`http://localhost:3001/batiks/getDataBatik`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${cookiesss.get("jwt")?.value}`,
-    },
-    next: { tags: ["customer"] },
-    credentials: "include",
-  });
+// export async function getBatikAll(): Promise<BatikItem[]> {
+//   const cookiesss = cookies();
+//   const res = await fetch(`http://localhost:3001/batiks/getDataBatik`, {
+//     method: "GET",
+//     headers: {
+//       Authorization: `Bearer ${cookiesss.get("jwt")?.value}`,
+//     },
+//     next: { tags: ["customer"] },
+//     credentials: "include",
+//   });
 
-  const data = await res.json();
+//   const data = await res.json();
 
-  return data.map((item: BatikItem) => {
-    return { ...item, waktuBikin: convertTime(item.waktuBikin) };
-  });
-}
+//   return data.map((item: BatikItem) => {
+//     return { ...item, waktuBikin: convertTime(item.waktuBikin) };
+//   });
+// }
 
-export const BatikPage = async () => {
-  // const { realTimeData } = useHttp("batik_update", "3001");
-  const hasil = await getBatikAll();
-
+export const BatikPage = () => {
+  const { realTimeData } = useHttp("batik_update", "3001");
+  console.log(realTimeData, `lers`);
+  // const { realTimeData } = useHttp("batik_update");
   return (
     <PembungkusSidebar>
       <div className="grid grid-cols-3 gap-4">
@@ -117,7 +122,8 @@ export const BatikPage = async () => {
       <br />
       <br />
 
-      <BatikTable columns={columns} />
+      {/* <BatikTable columns={columns} /> */}
+      <DataTable data={realTimeData} columns={columns} />
     </PembungkusSidebar>
   );
 };
