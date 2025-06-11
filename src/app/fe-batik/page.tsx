@@ -1,14 +1,24 @@
 "use client";
 
 import PembungkusSidebar from "../components/pembungkusSidebar";
-import { cookies } from "next/headers";
+// import { cookies } from "next/headers";
 import BatikTitle from "../components/batikUseAgain/HeaderCompoenents";
 import Link from "next/link";
 
-import { BatikTable } from "../components/batikUseAgain/BatikTable";
+// import { BatikTable } from "../components/batikUseAgain/BatikTable";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import useHttp from "../components/util/http-hook";
+import { useState } from "react";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 export interface BatikItem {
   typeBatik: string;
   stockBatikAwal: number;
@@ -56,7 +66,33 @@ export const convertTime = (data: string) => {
 export const BatikPage = () => {
   const { realTimeData } = useHttp("batik_update", "3001");
   console.log(realTimeData, `lers`);
-  // const { realTimeData } = useHttp("batik_update");
+  const [openDialogId, setOpenDialogId] = useState(null);
+
+  const column = [
+    { accessorKey: "typeBatik", header: "Type Batik" },
+    { accessorKey: "jenisBatik", header: "Jenis Batik" },
+    {
+      accessorKey: "stockSaatIni",
+      header: "Stock Saat Ini",
+      cell: ({ row }: any) => {
+        const getData = row.getValue("stockSaatIni");
+        return (
+          <div>
+            <h1 className="ml-10">{getData}</h1>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "id",
+      header: "Action",
+      enableHiding: false,
+      cell: ({ row }: { row: any }) => {
+        const getData = row.get("id");
+      },
+    },
+  ];
+
   return (
     <PembungkusSidebar>
       <div className="grid grid-cols-3 gap-4">

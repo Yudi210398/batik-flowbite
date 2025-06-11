@@ -17,6 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { DataTablePagination } from "@/components/ui/TablePagination";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -105,6 +106,9 @@ export function DataTable<TData, TValue>({
           Next
         </Button>
       </div>
+
+      {/* pagination advance */}
+      {/* <DataTablePagination table={table} /> */}
     </div>
   );
 }

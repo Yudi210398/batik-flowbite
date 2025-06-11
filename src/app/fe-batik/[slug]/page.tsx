@@ -1,8 +1,7 @@
 import BatikCode from "@/app/components/batikUseAgain/BatikCode";
 import PembungkusSidebar from "@/app/components/pembungkusSidebar";
 import { cookies } from "next/headers";
-import { convertTime } from "../page";
-
+import { notFound } from "next/navigation";
 export interface GetId {
   params: {
     slug: string | number;
@@ -28,7 +27,8 @@ export async function getBatikAll(id: string | number): Promise<BatikDetail[]> {
   });
 
   const data = await res.json();
-  return data.map((item: BatikDetail) => {
+  if (data?.message) notFound();
+  return data?.map((item: BatikDetail) => {
     return {
       ...item,
       waktuBikin: item?.batik.waktuBikin,
