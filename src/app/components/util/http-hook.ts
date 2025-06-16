@@ -6,6 +6,7 @@ import HttpError from "./http-error";
 export default function useHttp(
   dataScoket: string = "",
   port: string = "3001",
+  dataChange?: number | null,
   pagination?: { page: number; limit: number }
 ) {
   const [errorValidate, setErrorValidate] = useState<boolean>(false);
@@ -60,7 +61,7 @@ export default function useHttp(
       socketBaru.close();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataScoket, port]);
+  }, [dataScoket, port, dataChange]);
 
   return {
     pesanVerify,

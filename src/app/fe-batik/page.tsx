@@ -4,10 +4,9 @@ import PembungkusSidebar from "../components/pembungkusSidebar";
 // import { cookies } from "next/headers";
 import BatikTitle from "../components/batikUseAgain/HeaderCompoenents";
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
 // import { BatikTable } from "../components/batikUseAgain/BatikTable";
 import { DataTable } from "./data-table";
-import { columns } from "./columns";
 import useHttp from "../components/util/http-hook";
 import { useState } from "react";
 
@@ -18,6 +17,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { MoreHorizontal } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import PageErrorComponen from "../components/errorComponentWrongInput/ErrorComponrnt";
 
 export interface BatikItem {
   typeBatik: string;
@@ -26,13 +38,6 @@ export interface BatikItem {
   id: number;
   waktuBikin: any;
 }
-
-const columnss = [
-  { title: "TYPE BATIK", key: "typeBatik" },
-  { title: "CATEGORY", key: "jenisBatik" },
-  { title: "SISA STOCK BATIK", key: "stockSaatIni" },
-  { title: "Pembelian", key: "id", isLink: true },
-];
 
 export const convertTime = (data: string) => {
   const hasil = new Date(data);
@@ -45,28 +50,27 @@ export const convertTime = (data: string) => {
   return format;
 };
 
-// export async function getBatikAll(): Promise<BatikItem[]> {
-//   const cookiesss = cookies();
-//   const res = await fetch(`http://localhost:3001/batiks/getDataBatik`, {
-//     method: "GET",
-//     headers: {
-//       Authorization: `Bearer ${cookiesss.get("jwt")?.value}`,
-//     },
-//     next: { tags: ["customer"] },
-//     credentials: "include",
-//   });
-
-//   const data = await res.json();
-
-//   return data.map((item: BatikItem) => {
-//     return { ...item, waktuBikin: convertTime(item.waktuBikin) };
-//   });
-// }
-
 export const BatikPage = () => {
-  const { realTimeData } = useHttp("batik_update", "3001");
-  console.log(realTimeData, `lers`);
   const [openDialogId, setOpenDialogId] = useState(null);
+  const router = useRouter();
+  const { realTimeData } = useHttp("batik_update", "3001", openDialogId);
+  const { sendReq, setErrorValidate, pesanVerify, errorValidate } = useHttp();
+
+  const submitFungsi = async () => {
+    try {
+      setErrorValidate(false);
+
+      const result = await sendReq(
+        `http://localhost:3001/batiks/deletebatik/${openDialogId}`,
+        "DELETE"
+      );
+      result && alert("data berhasil di hapus") && router.refresh();
+    } catch (err: any) {
+      setErrorValidate(err);
+    } finally {
+      console.log(`fungsi bisa`);
+    }
+  };
 
   const column = [
     { accessorKey: "typeBatik", header: "Type Batik" },
@@ -88,7 +92,39 @@ export const BatikPage = () => {
       header: "Action",
       enableHiding: false,
       cell: ({ row }: { row: any }) => {
-        const getData = row.get("id");
+        const getData = row.getValue("id");
+        return (
+          <>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant={"ghost"}>
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  className="hover:cursor-pointer"
+                  onClick={() => navigator.clipboard.writeText(getData)}
+                >
+                  Copy payment ID
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <div className="text-blue-500 hover:underline hover:cursor-pointer">
+                    <Link href={`fe-batik/${getData}`}>Pembelian</Link>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="hover:cursor-pointer hover:underline"
+                  onClick={() => setOpenDialogId(getData)}
+                >
+                  <span className="text-red-500">Hapus</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </>
+        );
       },
     },
   ];
@@ -157,9 +193,44 @@ export const BatikPage = () => {
       </div>
       <br />
       <br />
+      <div className="flex items-center justify-center grid-cols-2 gap-2">
+        {errorValidate && (
+          <PageErrorComponen
+            pesanVerify={pesanVerify}
+            setErrorValidate={setErrorValidate}
+          />
+        )}
+      </div>
 
       {/* <BatikTable columns={columns} /> */}
-      <DataTable data={realTimeData} columns={columns} />
+      <DataTable data={realTimeData} columns={column} />
+      {/* Modal */}
+
+      <AlertDialog
+        open={!!openDialogId}
+        onOpenChange={(open) => !open && setOpenDialogId(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Yakin mau hapus?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Data bakal lenyap kayak utang gak dibayar. Gas?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setOpenDialogId(null)}>
+              Gak Jadi
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                submitFungsi();
+              }}
+            >
+              Hapus Aja!
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </PembungkusSidebar>
   );
 };
