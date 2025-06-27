@@ -36,7 +36,7 @@ export default function FormOrder() {
     try {
       setErrorValidate(false);
       const result = await sendReq(
-        `http://localhost:3001/batiks/beli`,
+        `http://localhost:3001/pembelian/batik`,
         "POST",
         dataObj
       );

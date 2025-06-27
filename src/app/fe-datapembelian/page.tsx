@@ -27,7 +27,7 @@ export async function getBatikPembelian(): Promise<Pembelian[]> {
   const cookiesss = cookies();
 
   const res = await fetch(
-    "http://localhost:3001/batiks/getDataBatikPembelian",
+    "http://localhost:3001/pembelian/getDataBatikPembelian",
     {
       method: "GET",
       headers: {

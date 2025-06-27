@@ -2,11 +2,10 @@
 import { io, Socket } from "socket.io-client";
 import { useCallback, useEffect, useState } from "react";
 import HttpError from "./http-error";
-
+export const dynamic = "force-dynamic";
 export default function useHttp(
   dataScoket: string = "",
   port: string = "3001",
-  dataChange?: number | null,
   pagination?: { page: number; limit: number }
 ) {
   const [errorValidate, setErrorValidate] = useState<boolean>(false);
@@ -30,6 +29,7 @@ export default function useHttp(
             "Content-Type": "application/json", // Tambahkan header jika ada body
             ...headers, // Gabungkan dengan headers tambahan
           },
+          cache: "no-store",
           credentials: "include",
         });
         const respondata = await respone.json();
@@ -60,8 +60,7 @@ export default function useHttp(
       socketBaru.off(dataScoket);
       socketBaru.close();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataScoket, port, dataChange]);
+  }, [dataScoket, port, pagination?.page, pagination?.limit]);
 
   return {
     pesanVerify,

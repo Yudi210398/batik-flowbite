@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Rss } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -52,19 +52,20 @@ export const convertTime = (data: string) => {
 
 export const BatikPage = () => {
   const [openDialogId, setOpenDialogId] = useState(null);
+
   const router = useRouter();
-  const { realTimeData } = useHttp("batik_update", "3001", openDialogId);
+  const { realTimeData } = useHttp("batik_update", "3001");
   const { sendReq, setErrorValidate, pesanVerify, errorValidate } = useHttp();
 
   const submitFungsi = async () => {
     try {
       setErrorValidate(false);
 
-      const result = await sendReq(
+      const res = await sendReq(
         `http://localhost:3001/batiks/deletebatik/${openDialogId}`,
         "DELETE"
       );
-      result && alert("data berhasil di hapus") && router.refresh();
+      res && window.location.reload();
     } catch (err: any) {
       setErrorValidate(err);
     } finally {
